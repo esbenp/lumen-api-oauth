@@ -34,7 +34,7 @@ class Proxy {
 
             $client = new Client();
             $guzzleResponse = $client->post(sprintf('%s/oauth/access-token', $config->get('app.url')), [
-                'body' => $data
+                'form_params' => $data
             ]);
         } catch(\GuzzleHttp\Exception\BadResponseException $e) {
             $guzzleResponse = $e->getResponse();
