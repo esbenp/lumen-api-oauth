@@ -5,10 +5,10 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "laravel/lumen-framework": "5.0.*",
+        "laravel/lumen-framework": "5.1.*",
         "vlucas/phpdotenv": "~1.0",
         "optimus/oauth2-server-lumen": "0.1.*",
-        "guzzlehttp/guzzle": "~5.3"
+        "guzzlehttp/guzzle": "~6.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0"

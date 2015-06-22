@@ -41,17 +41,17 @@ class Proxy {
             
         }
 
-        $response = $guzzleResponse->json();
+        $response = json_decode($guzzleResponse->getBody());
 
-        if (isset($response['access_token'])) {
+        if (property_exists($response, "access_token")) {
             $cookie = app()->make('cookie');
             $crypt  = app()->make('encrypter');
 
-            $encryptedToken = $crypt->encrypt($response['refresh_token']);
+            $encryptedToken = $crypt->encrypt($response->refresh_token);
 
             // Set the refresh token as an encrypted HttpOnly cookie
             $cookie->queue('refreshToken', 
-                $crypt->encrypt($response['refresh_token']),
+                $crypt->encrypt($encryptedToken),
                 604800, // expiration, should be moved to a config file
                 null, 
                 null, 
@@ -60,8 +60,8 @@ class Proxy {
             );
 
             $response = [
-                'accessToken'            => $response['access_token'],
-                'accessTokenExpiration'  => $response['expires_in']
+                'accessToken'            => $response->access_token,
+                'accessTokenExpiration'  => $response->expires_in
             ];
         }
 
