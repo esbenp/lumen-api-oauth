@@ -6,7 +6,7 @@ use GuzzleHttp\Client;
 
 class Proxy {
 
-    public function attemptLogin($credentials) 
+    public function attemptLogin($credentials)
     {
         return $this->proxy('password', $credentials);
     }
@@ -15,13 +15,13 @@ class Proxy {
     {
         $crypt = app()->make('encrypter');
         $request = app()->make('request');
-        
+
         return $this->proxy('refresh_token', [
             'refresh_token' => $crypt->decrypt($request->cookie('refreshToken'))
-        ]); 
+        ]);
     }
 
-    private function proxy($grantType, array $data = []) 
+    private function proxy($grantType, array $data = [])
     {
         try {
             $config = app()->make('config');
@@ -38,7 +38,7 @@ class Proxy {
             ]);
         } catch(\GuzzleHttp\Exception\BadResponseException $e) {
             $guzzleResponse = $e->getResponse();
-            
+
         }
 
         $response = json_decode($guzzleResponse->getBody());
@@ -50,12 +50,12 @@ class Proxy {
             $encryptedToken = $crypt->encrypt($response->refresh_token);
 
             // Set the refresh token as an encrypted HttpOnly cookie
-            $cookie->queue('refreshToken', 
-                $crypt->encrypt($encryptedToken),
+            $cookie->queue('refreshToken',
+                $encryptedToken,
                 604800, // expiration, should be moved to a config file
-                null, 
-                null, 
-                false, 
+                null,
+                null,
+                false,
                 true // HttpOnly
             );
 
